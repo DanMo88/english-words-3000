@@ -1,5 +1,6 @@
 (() => {
 'use strict';
+const fitW = t => t.length > 8 ? ` style="font-size:min(var(--fs),${(128 / t.length).toFixed(1)}vw)"` : '';
 const DAY = 86400000, INTERVALS = [1, 3, 7, 21], NEED = 3, PER_PAGE = 20;
 const LEVELS = [['A1', 'مبتدی'], ['A2', 'پایه'], ['B1', 'متوسط'], ['B2', 'بالاتر از متوسط']];
 const params = new URLSearchParams(location.search);
@@ -152,7 +153,7 @@ function learnCard(run) {
     <div class="top"><button class="x" aria-label="خروج">✕</button><div class="bar"><i style="width:${(run.i + 1) / n * 100}%"></i></div><span class="pill">${FA(run.i + 1)}/${FA(n)}</span></div>
     <div class="card ${w.img ? '' : 'noimg'}">
       <div class="pic">${w.img ? `<img src="${IMG(w.id)}" alt="">` : ''}</div>
-      <div class="word en">${esc(w.w)}</div>
+      <div class="word en"${fitW(w.w)}>${esc(w.w)}</div>
       <div class="fa">${esc(w.fa)}</div>
       <div class="ex en">${exHtml(w)}</div>
       <button class="spk" id="spk" aria-label="پخش دوباره">🔊</button>
@@ -214,7 +215,7 @@ function runQuiz(o) {
     else if (o.mode === 'placement') head = `<div class="h2">🎯 تعیین سطح ${tag(w.level)}</div><span class="pill">${FA(st.asked)}</span>`;
     else head = `<div class="bar"><i style="width:${progress() / total * 100}%"></i></div><span class="pill">${FA(progress())}/${FA(total)} درست</span>`;
     let mid;
-    if (q.type === 'en2fa') mid = `<div class="qword en">${esc(w.w)}</div>`;
+    if (q.type === 'en2fa') mid = `<div class="qword en"${fitW(w.w)}>${esc(w.w)}</div>`;
     else if (q.type === 'fa2en') mid = `<div class="qword fa">${esc(w.fa)}</div>`;
     else mid = `<button class="spk big" id="spk" aria-label="پخش دوباره">🔊</button>`;
     screen(`
