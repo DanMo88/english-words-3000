@@ -197,7 +197,7 @@ function runQuiz(o) {
     const w = W[q.id], ok = i === q.correctIdx, timeout = i === null;
     const btns = $app.querySelectorAll('.opt');
     btns.forEach((b, k) => { b.disabled = true; if (k === q.correctIdx) b.classList.add('ok'); else if (k === i) b.classList.add('bad'); else b.classList.add('dim'); });
-    const tb = document.getElementById('tbar'); if (tb) { const m = getComputedStyle(tb).transform; tb.style.transition = 'none'; tb.style.transform = m; }
+    const tb = document.getElementById('tbar'); if (tb) { const cs = getComputedStyle(tb), m = cs.transform, bg = cs.backgroundColor; tb.style.transition = 'none'; tb.style.transform = m; tb.style.background = bg; }
     const first = !st.firstTry.hasOwnProperty(q.id); if (first) st.firstTry[q.id] = ok;
     if (ok) { st.correct[q.id]++; st.right++; }
     else { st.wrong++; st.seenWrong[q.id] = (st.seenWrong[q.id] || 0) + 1; ws(q.id).miss = (ws(q.id).miss || 0) + 1; save(); vibrate(timeout ? [80, 60, 80] : 200); const p = document.getElementById('prompt'); p && p.classList.add('shake'); }
