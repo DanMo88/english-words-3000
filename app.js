@@ -1,5 +1,7 @@
 (() => {
 'use strict';
+const fitFa = t => { const m = Math.max(...t.split(/[\s،؛]+/).map(x => x.replace(/\u200c/g, '').length)); return m > 7 ? ` style="font-size:min(var(--fs),${(130 / m).toFixed(1)}vw)"` : ''; };
+const fitO = t => t.length > 9 ? ` style="font-size:min(var(--fs),${(66 / t.length).toFixed(1)}vw)"` : '';
 const fitW = t => t.length > 8 ? ` style="font-size:min(var(--fs),${(128 / t.length).toFixed(1)}vw)"` : '';
 const DAY = 86400000, INTERVALS = [1, 3, 7, 21], NEED = 3, PER_PAGE = 20;
 const LEVELS = [['A1', 'مبتدی'], ['A2', 'پایه'], ['B1', 'متوسط'], ['B2', 'بالاتر از متوسط']];
@@ -216,13 +218,13 @@ function runQuiz(o) {
     else head = `<div class="bar"><i style="width:${progress() / total * 100}%"></i></div><span class="pill">${FA(progress())}/${FA(total)} درست</span>`;
     let mid;
     if (q.type === 'en2fa') mid = `<div class="qword en"${fitW(w.w)}>${esc(w.w)}</div>`;
-    else if (q.type === 'fa2en') mid = `<div class="qword fa">${esc(w.fa)}</div>`;
+    else if (q.type === 'fa2en') mid = `<div class="qword fa"${fitFa(w.fa)}>${esc(w.fa)}</div>`;
     else mid = `<button class="spk big" id="spk" aria-label="پخش دوباره">🔊</button>`;
     screen(`
       <div class="top"><button class="x" aria-label="خروج">✕</button>${head}</div>
       <div class="timer"><i id="tbar"></i></div>
       <div class="prompt" id="prompt" data-type="${q.type}"><div class="qlabel">${label}</div>${mid}</div>
-      <div class="opts">${q.optIds.map((oid, i) => `<button class="opt ${showFa ? '' : 'en'}" data-i="${i}">${esc(showFa ? W[oid].fa : W[oid].w)}</button>`).join('')}</div>`);
+      <div class="opts">${q.optIds.map((oid, i) => `<button class="opt ${showFa ? '' : 'en'}" data-i="${i}"${showFa ? '' : fitO(W[oid].w)}>${esc(showFa ? W[oid].fa : W[oid].w)}</button>`).join('')}</div>`);
     bindX(() => { stopAudio(); clearTimers(); (o.onQuit || home)(); });
     $app.querySelectorAll('.opt').forEach(b => b.onclick = () => answer(+b.dataset.i));
     const spk = document.getElementById('spk'); if (spk) spk.onclick = () => playSeq([A(w.id)]);
