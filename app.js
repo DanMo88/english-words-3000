@@ -89,7 +89,7 @@ function home() {
   const rec = S.placement && S.placement.level;
   screen(`
     <div class="home-head"><div class="logo">۳۰۰۰ لغت<small>انگلیسی آمریکایی · Oxford 3000</small></div>
-      <div class="streak" title="روزهای پشت سر هم">🔥 ${FA(streakNow())}</div></div>
+      <div class="hd-r"><button class="inst pwa-install" data-install title="نصب اپ روی گوشی یا کامپیوتر">📲 نصب اپ</button><div class="streak" title="روزهای پشت سر هم">🔥 ${FA(streakNow())}</div></div></div>
     <div class="prog"><div class="row"><span>پیشرفت کل</span><b>${FA(learned)} / ${FA(TOTAL)} لغت</b></div>
       <div class="bar"><i style="width:${Math.max(learned / TOTAL * 100, learned ? 1 : 0)}%"></i></div></div>
     <div class="levels">${LEVELS.map(([lv, nm]) => { const L = LV[lv]; const n = L ? L.count : 0, done = L ? learnedIn(lv) : 0, ok = L && L.available;
@@ -360,7 +360,7 @@ function quickIntro() {
 const PQ = 8, PASS = 6;
 function placementIntro(first) {
   stopAudio();
-  screen(`<div class="top">${first ? '' : '<button class="x">✕</button>'}<div class="h2">🎯 آزمون تعیین سطح</div></div>
+  screen(`<div class="top">${first ? '' : '<button class="x">✕</button>'}<div class="h2">🎯 آزمون تعیین سطح</div>${first ? '<button class="inst pwa-install" data-install>📲 نصب اپ</button>' : ''}</div>
     <div class="empty"><div class="big">🎯</div><div>${first ? 'خوش اومدی! 👋<br>' : ''}حدود ۲ دقیقه.<br>لغت انگلیسی میاد، معنی فارسی رو انتخاب کن.<br>از A1 شروع می‌شه و اگه خوب جواب بدی، می‌ره سطح بالاتر.</div></div>
     <div class="btns"><button class="btn" id="go">شروع آزمون</button><button class="btn ghost" id="skip">${first ? 'رد کردن، خودم سطح رو انتخاب می‌کنم' : 'بازگشت'}</button></div>`);
   bindX(home);

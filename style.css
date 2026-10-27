@@ -136,3 +136,8 @@ button:active{transform:scale(.97)}
 .lvtag.A1{background:#059669}.lvtag.A2{background:#2563eb}.lvtag.B1{background:#7c3aed}.lvtag.B2{background:#ea580c}
 .pres{display:flex;gap:2vw;width:100%}
 .pres .stat b{font-size:clamp(16px,2.8dvh,24px)}
+/* install app (PWA) */
+:root{--pwa-accent:#4f46e5}
+.hd-r{display:flex;align-items:center;gap:2vw;flex:none}
+.inst{font:inherit;font-weight:700;font-size:clamp(12px,1.8dvh,16px);color:#fff;background:var(--pri);border:0;border-radius:99px;padding:.7dvh 3vw;box-shadow:0 3px 0 #3730a3;white-space:nowrap;cursor:pointer;flex:none}
+.top .inst{margin-inline-start:auto}

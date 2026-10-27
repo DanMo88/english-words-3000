@@ -1,7 +1,9 @@
-const V = 'ew3000-v5';
-const SHELL = ['./', 'index.html', 'style.css?v=5', 'app.js?v=5', 'manifest.webmanifest', 'data/index.json',
+// HTML: network-first · JSON data: network-first · css/js/manifest: stale-while-revalidate
+// media (audio/img/fonts/icons): cache-on-demand · cross-origin: never touched
+const V = 'ew3000-v6';
+const SHELL = ['./', 'index.html', 'style.css?v=6', 'app.js?v=6', 'install.js?v=1', 'manifest.webmanifest', 'data/index.json',
   'fonts/Vazirmatn-Regular.woff2', 'fonts/Vazirmatn-Bold.woff2', 'fonts/Vazirmatn-Black.woff2',
-  'icons/icon-192.png', 'icons/icon-512.png', 'audio/sfx-correct.mp3', 'audio/sfx-wrong.mp3'];
+  'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-192.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png', 'audio/sfx-correct.mp3', 'audio/sfx-wrong.mp3'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V && k !== 'ew3000-media').map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 async function ranged(req, res) {
@@ -25,8 +27,13 @@ self.addEventListener('fetch', e => {
       }
       return ranged(req, res);
     })());
-  } else {
+  } else if (req.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('.html') || url.pathname.endsWith('.json')) {
     e.respondWith(fetch(req).then(r => { if (r.ok) { const cp = r.clone(); caches.open(V).then(c => c.put(req, cp)); } return r; })
       .catch(() => caches.match(req, { ignoreSearch: url.pathname.endsWith('.json') ? false : true }).then(r => r || caches.match(req, { ignoreSearch: true })).then(r => r || caches.match('index.html'))));
+  } else {
+    e.respondWith(caches.match(req).then(hit => {
+      const net = fetch(req).then(r => { if (r.ok) { const cp = r.clone(); caches.open(V).then(c => c.put(req, cp)); } return r; }).catch(() => hit || caches.match(req, { ignoreSearch: true }));
+      return hit || net;
+    }));
   }
 });
